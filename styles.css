@@ -1,0 +1,17 @@
+
+body{font-family:Arial,sans-serif;margin:0;background:#f6f6f6}
+.topbar{display:flex;justify-content:space-between;align-items:center;background:#f7944d;color:#fff;padding:12px 16px}
+.menu-btn,.add-btn{background:none;border:none;color:#fff;font-size:24px}
+.sidebar{position:fixed;left:-260px;top:0;width:240px;height:100%;background:linear-gradient(#f7944d,#ec3cc4);padding:20px;transition:.3s}
+.sidebar.show{left:0}
+.sidebar a,.logo{display:block;color:#fff;text-decoration:none;padding:14px}
+.container{padding:16px}
+.hero{background:linear-gradient(90deg,#f7e5d3,#fff);border-radius:20px;padding:24px;position:relative;overflow:hidden}
+.hero:after{content:'';position:absolute;right:-50px;top:-50px;width:180px;height:180px;border-radius:50%;background:#f7944d}
+.hero:before{content:'';position:absolute;right:20px;bottom:-60px;width:140px;height:140px;border-radius:50%;background:#ec3cc4}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.actions button,button{background:linear-gradient(90deg,#f7944d,#ec3cc4);color:#fff;border:none;border-radius:12px;padding:14px;margin:6px 0;width:100%}
+input,select{width:100%;padding:12px;margin:6px 0;border-radius:12px;border:1px solid #ddd;box-sizing:border-box}
+.hidden{display:none}
+.stock-item{background:#fff;border-radius:16px;padding:16px;margin:10px 0}
