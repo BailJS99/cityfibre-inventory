@@ -1,0 +1,23 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>CityFibre Inventory V3</title>
+<style>
+body{font-family:Arial;margin:0;background:#f4f6f8}header{background:#003B5C;color:#fff;padding:15px}#menu{position:fixed;left:-250px;top:0;width:250px;height:100%;background:#003B5C;color:white;transition:.3s;padding-top:60px}#menu a{display:block;color:white;padding:15px;text-decoration:none}#menu.show{left:0}.content{padding:15px}.card{background:white;padding:15px;margin:10px 0;border-radius:12px}.hidden{display:none}button{background:#00B5C8;color:white;border:none;padding:10px;border-radius:8px;margin:5px}input,select{width:100%;padding:8px;margin:5px 0}
+</style></head><body>
+<header><button onclick="toggle()">☰</button> CityFibre Inventory</header>
+<div id=menu><a href="#" onclick="show('stock')">Stock Count</a><a href="#" onclick="show('orders')">Stock Orders</a><a href="#" onclick="show('jobs')">Jobs</a><a href="#" onclick="show('settings')">Settings</a></div>
+<div class=content>
+<div id=stock><div class=card><input id=n placeholder="Item"><input id=q type=number placeholder="Qty"><input id=t type=number placeholder="Threshold"><input id=target type=number placeholder="Target"><button onclick="add()">Add Item</button></div><div id=list></div></div>
+<div id=orders class=hidden><div class=card><h3>Suggested Orders</h3><div id=orderlist></div></div></div>
+<div id=jobs class=hidden><div class=card><input id=jobref placeholder="Job Ref"><select id=jobitem></select><input id=jobqty type=number placeholder="Qty Used"><button onclick="logJob()">Save Job</button></div><div id=jobhist></div></div>
+<div id=settings class=hidden><div class=card><label>Theme</label><select onchange="theme(this.value)"><option>Default</option><option>Dark</option></select></div></div>
+</div>
+<script>
+let stock=JSON.parse(localStorage.stock||'[]'), jobs=JSON.parse(localStorage.jobs||'[]');
+function save(){localStorage.stock=JSON.stringify(stock);localStorage.jobs=JSON.stringify(jobs);render();}
+function toggle(){menu.classList.toggle('show')}
+function show(id){['stock','orders','jobs','settings'].forEach(x=>document.getElementById(x).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');toggle();render();}
+function add(){stock.push({n:n.value,q:+q.value,t:+t.value,target:+target.value});save();}
+function render(){list.innerHTML='';jobitem.innerHTML='';stock.forEach((s,i)=>{list.innerHTML+=`<div class=card>${s.n} Qty:${s.q} <button onclick="stock[${i}].q++;save()">+</button><button onclick="stock[${i}].q--;save()">-</button></div>`;jobitem.innerHTML+=`<option>${s.n}</option>`});orderlist.innerHTML=stock.filter(s=>s.q<=s.t).map(s=>`${s.n}: Order ${s.target-s.q}`).join('<br>')||'No orders required';jobhist.innerHTML=jobs.map(j=>`<div class=card>${j.ref}: ${j.item} x${j.qty}</div>`).join('')}
+function logJob(){let i=stock.find(x=>x.n==jobitem.value); if(i)i.q-=+jobqty.value;jobs.push({ref:jobref.value,item:jobitem.value,qty:jobqty.value});save();}
+function theme(v){document.body.style.background=v=='Dark'?'#222':'#f4f6f8';document.body.style.color=v=='Dark'?'#fff':'#000'}
+render();
+</script></body></html>
