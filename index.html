@@ -1,0 +1,36 @@
+<!DOCTYPE html><html><head><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>CityFibre Inventory V4</title>
+<style>
+:root{--orange:#F7944D;--pink:#EC3CC4;--bg:#F7F8FA}
+body{margin:0;font-family:-apple-system,Arial;background:var(--bg)}
+header{background:linear-gradient(90deg,var(--orange),var(--pink));color:#fff;padding:15px;display:flex;align-items:center}
+#menuBtn{font-size:24px;background:none;border:none;color:#fff}
+#sidebar{position:fixed;left:-250px;top:0;width:250px;height:100%;background:linear-gradient(var(--orange),var(--pink));transition:.3s;padding-top:60px}
+#sidebar.show{left:0} #sidebar a{display:block;color:white;padding:15px;text-decoration:none}
+.content{padding:15px}.card{background:#fff;border-radius:16px;padding:15px;margin:10px 0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.hidden{display:none} button{background:var(--orange);color:#fff;border:none;padding:10px;border-radius:10px}
+input{width:100%;padding:10px;margin:5px 0;border-radius:10px;border:1px solid #ddd}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+</style></head><body>
+<header><button id=menuBtn onclick='toggle()'>☰</button><h2 style='margin-left:10px'>CityFibre Inventory</h2></header>
+<div id=sidebar><a onclick="show('dash')">Dashboard</a><a onclick="show('stock')">Stock Count</a><a onclick="show('orders')">Stock Orders</a><a onclick="show('jobs')">Jobs</a><a onclick="show('settings')">Settings</a></div>
+<div class=content>
+<div id=dash><div class=stats><div class=card>Total Items<br><span id=ti>0</span></div><div class=card>Orders Needed<br><span id=oi>0</span></div></div></div>
+<div id=stock class=hidden><div class=card><input id=n placeholder='Item'><input id=q type=number placeholder='Qty'><input id=t type=number placeholder='Threshold'><input id=target type=number placeholder='Target'><button onclick='add()'>Add Item</button></div><div id=list></div></div>
+<div id=orders class=hidden><div id=orderlist></div></div>
+<div id=jobs class=hidden><div class=card><input id=jr placeholder='Job Ref'><input id=ji placeholder='Item'><input id=jq type=number placeholder='Qty'><button onclick='job()'>Save Job</button></div><div id=jobslist></div></div>
+<div id=settings class=hidden><div class=card><button onclick="document.body.style.background='#222'">Dark</button> <button onclick="document.body.style.background='#F7F8FA'">Light</button></div></div>
+</div>
+<script>
+let stock=JSON.parse(localStorage.stock||'[]'), jobs=JSON.parse(localStorage.jobs||'[]');
+function toggle(){sidebar.classList.toggle('show')}
+function show(x){['dash','stock','orders','jobs','settings'].forEach(i=>document.getElementById(i).classList.add('hidden'));document.getElementById(x).classList.remove('hidden');sidebar.classList.remove('show');render()}
+function save(){localStorage.stock=JSON.stringify(stock);localStorage.jobs=JSON.stringify(jobs);render()}
+function add(){stock.push({n:n.value,q:+q.value,t:+t.value,target:+target.value});save()}
+function job(){jobs.push({r:jr.value,i:ji.value,q:jq.value});let s=stock.find(x=>x.n==ji.value);if(s)s.q-=+jq.value;save()}
+function render(){ti.textContent=stock.length;oi.textContent=stock.filter(s=>s.q<=s.t).length;
+list.innerHTML=stock.map((s,i)=>`<div class=card><b>${s.n}</b><br>Current:${s.q} Threshold:${s.t} Target:${s.target}<br><button onclick='stock[${i}].q++;save()'>+</button><button onclick='stock[${i}].q--;save()'>-</button></div>`).join('');
+orderlist.innerHTML=stock.filter(s=>s.q<=s.t).map(s=>`<div class=card>${s.n}: Order ${s.target-s.q}</div>`).join('')||'<div class=card>No orders needed</div>';
+jobslist.innerHTML=jobs.map(j=>`<div class=card>${j.r}: ${j.i} x${j.q}</div>`).join('')}
+render();
+</script></body></html>
