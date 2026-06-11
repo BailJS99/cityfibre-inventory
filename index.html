@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CityFibre Inventory</title>
+<style>
+body{font-family:Arial;margin:0;background:#f5f7fa;color:#123}
+header{background:#003b5c;color:white;padding:15px;text-align:center}
+.container{padding:15px}
+.card{background:white;border-radius:12px;padding:15px;margin:10px 0;box-shadow:0 2px 5px rgba(0,0,0,.1)}
+button{background:#00b7c6;color:white;border:none;padding:8px 12px;border-radius:8px}
+input{padding:8px;margin:5px;width:calc(100% - 20px)}
+.low{color:red}
+</style></head><body>
+<header><h1>CityFibre Inventory</h1></header>
+<div class='container'>
+<div class='card'>
+<input id='name' placeholder='Item name'>
+<input id='qty' type='number' placeholder='Quantity'>
+<input id='min' type='number' placeholder='Minimum stock'>
+<button onclick='addItem()'>Add Item</button>
+<button onclick='exportData()'>Export Backup</button>
+<input type='file' onchange='importData(event)'>
+</div>
+<div id='items'></div>
+</div>
+<script>
+let items=JSON.parse(localStorage.getItem('cfinv')||'[]');
+function save(){localStorage.setItem('cfinv',JSON.stringify(items));render();}
+function addItem(){
+const n=name.value.trim(); if(!n) return;
+items.push({name:n,qty:+qty.value||0,min:+min.value||0});
+name.value=qty.value=min.value=''; save();}
+function update(i,d){items[i].qty+=d; save();}
+function del(i){items.splice(i,1); save();}
+function render(){
+itemsDiv.innerHTML=items.map((it,i)=>`<div class='card'>
+<b>${it.name}</b> ${it.qty<=it.min?"<span class='low'>LOW STOCK</span>":""}<br>
+Qty: ${it.qty} | Min: ${it.min}<br>
+<button onclick='update(${i},1)'>+1</button>
+<button onclick='update(${i},-1)'>-1</button>
+<button onclick='del(${i})'>Delete</button></div>`).join('');
+}
+function exportData(){
+const blob=new Blob([JSON.stringify(items)],{type:'application/json'});
+const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cityfibre-inventory-backup.json'; a.click();}
+function importData(e){
+const f=e.target.files[0]; const r=new FileReader();
+r.onload=()=>{items=JSON.parse(r.result); save();}; r.readAsText(f);}
+render();
+</script></body></html>
