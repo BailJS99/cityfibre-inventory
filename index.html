@@ -1,0 +1,8 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="styles.css"><title>CityFibre Inventory V5</title></head><body>
+<div id="sidebar" class="sidebar"><a onclick="show('dashboard')">Dashboard</a><a onclick="show('stock')">Stock</a><a onclick="show('orders')">Orders</a><a onclick="show('jobs')">Jobs</a></div>
+<header><button onclick="toggle()">☰</button><h2>CityFibre Inventory</h2></header>
+<section id="dashboard"><div class="hero">Welcome back!</div><div id="stats"></div><button onclick="show('stock')">Add Stock Item</button><button onclick="show('jobs')">Create Job</button></section>
+<section id="stock" class="hidden"><input id="name" placeholder="Item"><input id="qty" type="number" placeholder="Qty"><input id="thr" type="number" placeholder="Threshold"><input id="target" type="number" placeholder="Target"><button onclick="addItem()">Save Item</button><div id="stockList"></div></section>
+<section id="orders" class="hidden"><div id="orderList"></div></section>
+<section id="jobs" class="hidden"><input id="jobRef" placeholder="Job Ref"><select id="jobItem"></select><input id="jobQty" type="number" placeholder="Qty Used"><button onclick="saveJob()">Save Job</button><div id="jobList"></div></section>
+<script src="app.js"></script></body></html>
