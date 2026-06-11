@@ -1,0 +1,13 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="css/styles.css"><title>CityFibre Inventory V7</title></head><body>
+<div id="sidebar" class="sidebar">
+<h2>CityFibre</h2>
+<a data-page="dashboard">Dashboard</a><a data-page="stock">Stock Count</a><a data-page="orders">Stock Orders</a><a data-page="jobs">Jobs</a><a data-page="settings">Settings</a>
+</div>
+<header><button id="menuBtn">☰</button><span>CityFibre Inventory</span></header>
+<main>
+<section id="dashboard" class="page"><div class="hero"><h1>Welcome back!</h1></div><div id="stats"></div></section>
+<section id="stock" class="page hidden"><input id="itemName" placeholder="Item"><input id="itemQty" type="number" placeholder="Qty"><input id="itemThreshold" type="number" placeholder="Threshold"><input id="itemTarget" type="number" placeholder="Target"><button id="addItemBtn">Add Item</button><div id="stockList"></div></section>
+<section id="orders" class="page hidden"><div id="orderList"></div></section>
+<section id="jobs" class="page hidden"><input id="jobRef" placeholder="Job Ref"><select id="jobItem"></select><input id="jobQty" type="number" placeholder="Qty"><button id="saveJobBtn">Save Job</button><div id="jobList"></div></section>
+<section id="settings" class="page hidden"><h2>Settings</h2></section>
+</main><script src="js/app.js"></script></body></html>
